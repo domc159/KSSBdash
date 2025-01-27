@@ -1,0 +1,93 @@
+version: '3'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app
+      - type: volume
+        source: dokumenti_pristopne
+        target: /home/database/KSSB_V2/dokumenti/pristopna_izjava
+      - type: volume
+        source: dokumenti_vpis
+        target: /home/database/KSSB_V2/dokumenti/potrdila_vpis
+      - type: volume
+        source: dokumenti_clanstvo
+        target: /home/database/KSSB_V2/dokumenti/potrdila_clanstvo
+      - type: volume
+        source: dokumenti_temp
+        target: /home/database/KSSB_V2/temp
+      - type: volume
+        source: dokumenti_pdf
+        target: /home/database/pdf
+      - type: volume
+        source: log_data
+        target: /app/log
+    environment:
+      - HOST=mysql_db
+      - DATABASE=KSSB_V2
+      - USER=root
+      - PASSWORD=tarcinakubik
+    depends_on:
+      mysql_db:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./frontend/kssb_admin_panel
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend/kssb_admin_panel:/app:ro
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:5000
+      - NODE_ENV=development
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  mysql_db:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=KSSB_V2
+      - MYSQL_ROOT_PASSWORD=tarcinakubik
+      - MYSQL_ROOT_HOST=%
+    volumes:
+      - type: volume
+        source: mysql_data
+        target: /var/lib/mysql
+      - type: bind
+        source: ./mysql/init
+        target: /docker-entrypoint-initdb.d
+        read_only: true
+    command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks:
+      - app-network
+
+volumes:
+  mysql_data:
+  dokumenti_pristopne:
+  dokumenti_vpis:
+  dokumenti_clanstvo:
+  dokumenti_temp:
+  dokumenti_pdf:
+  log_data:
+
+networks:
+  app-network:
+    driver: bridge 
