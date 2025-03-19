@@ -220,11 +220,12 @@ class EmailProcessorReaderBak:
         }
 
     def setup_database(self):
-        hostname = "10.10.5.27"
-        database = "KSSB_V2"
-        username = "root"
-        password = "tarcinakubik"
-        self.engine = create_engine(f"mysql+pymysql://{username}:{password}@{hostname}/{database}")
+        # Konfiguracija povezave z bazo vpiši credentialse
+        HOST = "ip_address"
+        DATABASE = "db name"
+        USER = "username"
+        PASSWORD = "password"
+        self.engine = create_engine(f"mysql+pymysql://{USER}:{PASSWORD}@{HOST}/{DATABASE}?charset=utf8mb4")      
         Session = sessionmaker(bind=self.engine)
         self.session = Session()
 

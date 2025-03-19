@@ -25,11 +25,11 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
-# Konfiguracija povezave z bazo
-HOST = "10.10.5.27"
-DATABASE = "KSSB_V2"
-USER = "root"
-PASSWORD = "tarcinakubik"
+# Konfiguracija povezave z bazo vpiši credentialse
+HOST = "ip_address"
+DATABASE = "db name"
+USER = "username"
+PASSWORD = "password"
 engine = create_engine(f"mysql+pymysql://{USER}:{PASSWORD}@{HOST}/{DATABASE}?charset=utf8mb4")
 metadata = MetaData()
 

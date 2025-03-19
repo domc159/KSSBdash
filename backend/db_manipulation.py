@@ -24,12 +24,12 @@ logger = logging.getLogger(__name__)
 
 def find_duplicates():
     try:
-        # Database connection setup
-        hostname = "10.10.5.27"
-        database = "KSSB_V2"
-        username = "root"
-        password = "tarcinakubik"
-        engine = create_engine(f"mysql+pymysql://{username}:{password}@{hostname}/{database}")
+        # Konfiguracija povezave z bazo vpiši credentialse
+        HOST = "ip_address"
+        DATABASE = "db name"
+        USER = "username"
+        PASSWORD = "password"
+        engine = create_engine(f"mysql+pymysql://{USER}:{PASSWORD}@{HOST}/{DATABASE}?charset=utf8mb4")
 
         # First check if there are any records to check
         with engine.connect() as connection:
