@@ -611,8 +611,9 @@ class EmailProcessorMailReader:
             return False
 
 if __name__ == "__main__":
-    EMAIL_USER = "baza@kssb.si"
-    EMAIL_PASS = "qcvl zrhx vnvv noqk"
+    #set gmail login credentials and down the code replace example@example.com with e-mail addresses to filter by senders
+    EMAIL_USER = "exemple@example.com"
+    EMAIL_PASS = "xxxx xxxx xxxx xxxx"
     CHECK_INTERVAL = 3600  # ena ura čakanja
 
     while True:
@@ -632,7 +633,7 @@ if __name__ == "__main__":
                     email_message = email.message_from_string(msg_content)
                     sender = email_message["From"]
                     
-                    if "vclanitev@kssb.si" in sender or "middleearth159@gmail.com" in sender:
+                    if "exemple@example.com" in sender or "exemple@example.com" in sender:
                         # Process single email with ReaderBak
                         processor_reader_bak._current_email_message = email_message
                         subject = ''
@@ -650,7 +651,7 @@ if __name__ == "__main__":
                                 data = processor_reader_bak.extract_data_from_html(html_content)
                                 processor_reader_bak.save_to_database(data)
                     
-                    elif "domen.unuk@datanexus.si" in sender or "pomembno@studentski-servis.com" in sender:
+                    elif "exemple@example.com" in sender or "exemple@example.com" in sender:
                         # Process single email with MailReader
                         pdf_path, email_content = processor_mail_reader.extract_pdf_and_email_content(email_message)
                         if pdf_path:
